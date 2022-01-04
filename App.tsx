@@ -1,31 +1,32 @@
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AppLoading from "expo-app-loading";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { ApolloProvider } from "@apollo/client";
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
+import { createApolloClient } from "./apollo/client";
 import Navigation from "./navigation";
 import { AuthContextProvider } from "./contexts/auth";
 
-export default function App() {
+const App = () => {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
-
-  // Create a client
-  const queryClient = new QueryClient();
+  const client = createApolloClient();
 
   if (!isLoadingComplete) {
     return <AppLoading />;
-  } else {
-    return (
-      <SafeAreaProvider>
-        <QueryClientProvider client={queryClient}>
-          <AuthContextProvider>
-            <Navigation colorScheme={colorScheme} />
-          </AuthContextProvider>
-        </QueryClientProvider>
-        <StatusBar />
-      </SafeAreaProvider>
-    );
   }
-}
+
+  return (
+    <SafeAreaProvider>
+      <ApolloProvider client={client}>
+        <AuthContextProvider>
+          <Navigation colorScheme={colorScheme} />
+        </AuthContextProvider>
+      </ApolloProvider>
+      <StatusBar />
+    </SafeAreaProvider>
+  );
+};
+
+export default App;

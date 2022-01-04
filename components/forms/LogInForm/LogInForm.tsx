@@ -18,10 +18,7 @@ const LogInForm = () => {
     <Formik
       initialValues={{ email: "", password: "" }}
       validationSchema={LogInSchema}
-      onSubmit={async (
-        { email, password },
-        { setSubmitting, setStatus, resetForm },
-      ) => {
+      onSubmit={async ({ email, password }, { resetForm }) => {
         try {
           await logIn({ email, password });
 

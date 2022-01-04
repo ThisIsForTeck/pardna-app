@@ -11,8 +11,9 @@ import {
   DarkTheme,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { useContext } from "react";
-import { ColorSchemeName, Pressable } from "react-native";
+import { useContext, useEffect } from "react";
+import { ColorSchemeName, Pressable, Text } from "react-native";
+import * as SecureStore from "expo-secure-store";
 import Colors from "../constants/Colors";
 import { AuthContext } from "../contexts/auth";
 import useColorScheme from "../hooks/useColorScheme";
@@ -29,6 +30,30 @@ import LogInScreen from "../screens/LogInScreen";
 import NewPardnaModalScreen from "../screens/NewPardnaModalScreen";
 
 const Navigation = ({ colorScheme }: { colorScheme: ColorSchemeName }) => {
+  const { dispatch } = useContext(AuthContext);
+
+  useEffect(() => {
+    const bootstrapAsync = async () => {
+      let token;
+
+      try {
+        token = await SecureStore.getItemAsync("userToken");
+        console.log({ token });
+      } catch (e) {
+        // restoring token failed
+        console.error({ e });
+      }
+
+      // After restoring token, we may need to validate it in production apps
+
+      // This will switch to the App screen or Auth screen and this loading
+      // screen will be unmounted and thrown away.
+      dispatch({ type: "RESTORE_TOKEN", token });
+    };
+
+    bootstrapAsync();
+  }, []);
+
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
@@ -91,12 +116,14 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
+  const { logOut } = useContext(AuthContext);
 
   return (
     <BottomTab.Navigator
       initialRouteName="YourPardnas"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
+        headerRight: () => <Text onPress={logOut}>Log out</Text>,
       }}
     >
       <BottomTab.Screen
@@ -105,20 +132,6 @@ function BottomTabNavigator() {
         options={({ navigation }: RootTabScreenProps<"YourPardnas">) => ({
           title: "Your Pardnas",
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate("NewPardnaModal")}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                color={Colors[colorScheme].text}
-              />
-            </Pressable>
-          ),
         })}
       />
       <BottomTab.Screen

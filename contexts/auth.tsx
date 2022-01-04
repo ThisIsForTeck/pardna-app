@@ -1,6 +1,7 @@
 import React, { createContext, ReactElement, useMemo, useReducer } from "react";
-import axios from "axios";
+import { useApolloClient } from "@apollo/client";
 import * as SecureStore from "expo-secure-store";
+import { LOGIN_MUTATION } from "../apollo/queries";
 
 type logInProps = {
   email: string;
@@ -34,6 +35,7 @@ export const AuthContext = createContext<AuthContextProps>({
 });
 
 export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
+  const client = useApolloClient();
   const [state, dispatch] = useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -73,18 +75,15 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         // In the example, we'll use a dummy token
 
         try {
+          // manually firing off mutation and pull id from response
           const {
             data: {
-              data: { user, token },
+              logIn: { token },
             },
-          } = await axios.post(
-            "https://api.pardnapp.com/graphql",
-            {
-              email,
-              password,
-            },
-            { withCredentials: false },
-          );
+          } = await client.mutate({
+            mutation: LOGIN_MUTATION,
+            variables: { email, password },
+          });
 
           await SecureStore.setItemAsync("userToken", token);
 

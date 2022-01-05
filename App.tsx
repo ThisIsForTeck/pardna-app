@@ -1,23 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import AppLoading from "expo-app-loading";
+import { ApolloProvider } from "@apollo/client";
+import useCachedResources from "./hooks/useCachedResources";
+import useColorScheme from "./hooks/useColorScheme";
+import { createApolloClient } from "./apollo/client";
+import Navigation from "./navigation";
+import { AuthContextProvider } from "./contexts/auth";
 
-import useCachedResources from './hooks/useCachedResources';
-import useColorScheme from './hooks/useColorScheme';
-import Navigation from './navigation';
-
-export default function App() {
+const App = () => {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
+  const client = createApolloClient();
 
   if (!isLoadingComplete) {
-    return null;
-  } else {
-    return (
-      <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
-        <StatusBar />
-      </SafeAreaProvider>
-    );
+    return <AppLoading />;
   }
-}
+
+  return (
+    <SafeAreaProvider>
+      <ApolloProvider client={client}>
+        <AuthContextProvider>
+          <Navigation colorScheme={colorScheme} />
+        </AuthContextProvider>
+      </ApolloProvider>
+      <StatusBar />
+    </SafeAreaProvider>
+  );
+};
+
+export default App;

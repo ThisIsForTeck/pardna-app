@@ -1,8 +1,9 @@
 {
   "expo": {
     "name": "Pardna",
-    "slug": "Pardna",
+    "slug": "pardna",
     "version": "1.0.0",
+    "owner": "thisisforteck",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -19,9 +20,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.thisisforteck.pardna",
+      "buildNumber": "1.0.0"
     },
     "android": {
+      "package": "com.thisisforteck.pardna",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"

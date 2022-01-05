@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AppLoading from "expo-app-loading";
 import { ApolloProvider } from "@apollo/client";
+import { Provider as PaperProvider } from "react-native-paper";
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import { createApolloClient } from "./apollo/client";
@@ -21,7 +22,9 @@ const App = () => {
     <SafeAreaProvider>
       <ApolloProvider client={client}>
         <AuthContextProvider>
-          <Navigation colorScheme={colorScheme} />
+          <PaperProvider>
+            <Navigation colorScheme={colorScheme} />
+          </PaperProvider>
         </AuthContextProvider>
       </ApolloProvider>
       <StatusBar />

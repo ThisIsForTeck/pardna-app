@@ -38,7 +38,6 @@ const Navigation = ({ colorScheme }: { colorScheme: ColorSchemeName }) => {
 
       try {
         token = await SecureStore.getItemAsync("userToken");
-        console.log({ token });
       } catch (e) {
         // restoring token failed
         console.error({ e });

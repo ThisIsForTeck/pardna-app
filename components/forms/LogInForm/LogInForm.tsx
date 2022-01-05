@@ -1,8 +1,9 @@
 import { useContext } from "react";
-import { TextInput, Text, View, TouchableOpacity } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { TextInput, Button } from "react-native-paper";
 import { AuthContext } from "../../../contexts/auth";
+import { StyledSurface } from "./LogInForm.styled";
 
 const LogInSchema = Yup.object().shape({
   email: Yup.string()
@@ -28,27 +29,38 @@ const LogInForm = () => {
         }
       }}
     >
-      {({ handleChange, handleBlur, handleSubmit, values }) => (
-        <View>
+      {({ handleChange, handleBlur, handleSubmit, isSubmitting, values }) => (
+        <StyledSurface
+          style={{
+            elevation: 4,
+          }}
+        >
           <TextInput
+            label="Email"
             value={values.email}
-            placeholder="Your email address"
             onChangeText={handleChange("email")}
             onBlur={handleBlur("email")}
             autoCapitalize="none"
+            autoComplete={false}
           />
           <TextInput
+            label="Password"
             value={values.password}
-            placeholder="PIN code"
             onChangeText={handleChange("password")}
             onBlur={handleBlur("password")}
             autoCapitalize="none"
             secureTextEntry
+            autoComplete={false}
           />
-          <TouchableOpacity onPress={() => handleSubmit()}>
-            <Text>Continue</Text>
-          </TouchableOpacity>
-        </View>
+          <Button
+            mode="contained"
+            uppercase={false}
+            onPress={() => handleSubmit()}
+            loading={isSubmitting}
+          >
+            Log in
+          </Button>
+        </StyledSurface>
       )}
     </Formik>
   );

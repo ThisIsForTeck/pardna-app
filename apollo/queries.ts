@@ -15,3 +15,25 @@ export const LOGIN_MUTATION = gql`
     }
   }
 `;
+
+export const PARDNAS_QUERY = gql`
+  query PARDNAS_QUERY {
+    pardnas {
+      id
+      name
+      startDate
+      endDate
+      participants {
+        id
+        name
+        payments {
+          id
+          type
+          dueDate
+          overdue
+          settled
+        }
+      }
+    }
+  }
+`;

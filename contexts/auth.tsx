@@ -95,6 +95,9 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       logOut: async () => {
         await SecureStore.deleteItemAsync("userToken");
 
+        // clear caches of query results
+        client.clearStore();
+
         dispatch({ type: "SIGN_OUT" });
       },
       register: async () => {

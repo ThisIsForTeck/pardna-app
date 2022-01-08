@@ -131,7 +131,9 @@ function BottomTabNavigator() {
         component={YourPardnasScreen}
         options={({ navigation }: RootTabScreenProps<"YourPardnas">) => ({
           title: "Your Pardnas",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="list-ul" color={color} />
+          ),
         })}
       />
       <BottomTab.Screen
@@ -139,7 +141,7 @@ function BottomTabNavigator() {
         component={NewPardnaScreen}
         options={{
           title: "New Pardna",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="plus" color={color} />,
         }}
       />
     </BottomTab.Navigator>

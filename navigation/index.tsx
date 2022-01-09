@@ -3,7 +3,6 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   NavigationContainer,
@@ -12,11 +11,11 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useContext, useEffect } from "react";
-import { ColorSchemeName, Pressable, Text } from "react-native";
+import { ColorSchemeName, Text } from "react-native";
 import * as SecureStore from "expo-secure-store";
-import Colors from "../constants/Colors";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faWallet, faPlusCircle } from "@fortawesome/pro-regular-svg-icons";
 import { AuthContext } from "../contexts/auth";
-import useColorScheme from "../hooks/useColorScheme";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import YourPardnasScreen from "../screens/YourPardnasScreen";
 import NewPardnaScreen from "../screens/NewPardnaScreen";
@@ -28,6 +27,7 @@ import {
 import LinkingConfiguration from "./LinkingConfiguration";
 import LogInScreen from "../screens/LogInScreen";
 import NewPardnaModalScreen from "../screens/NewPardnaModalScreen";
+import tw from "../lib/tailwind";
 
 const Navigation = ({ colorScheme }: { colorScheme: ColorSchemeName }) => {
   const { dispatch } = useContext(AuthContext);
@@ -115,24 +115,35 @@ function RootNavigator() {
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
   const { logOut } = useContext(AuthContext);
 
   return (
     <BottomTab.Navigator
       initialRouteName="YourPardnas"
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
-        headerRight: () => <Text onPress={logOut}>Log out</Text>,
+        tabBarStyle: {
+          paddingTop: 12,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+        },
+        tabBarIconStyle: {
+          paddingBottom: 8,
+        },
+        headerRight: () => (
+          <Text style={tw.style("px-4")} onPress={logOut}>
+            Log out
+          </Text>
+        ),
       }}
     >
       <BottomTab.Screen
         name="YourPardnas"
         component={YourPardnasScreen}
         options={({ navigation }: RootTabScreenProps<"YourPardnas">) => ({
-          title: "Your Pardnas",
+          title: "Pardnas",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="list-ul" color={color} />
+            <FontAwesomeIcon icon={faWallet} size={24} color={color} />
           ),
         })}
       />
@@ -140,22 +151,20 @@ function BottomTabNavigator() {
         name="NewPardna"
         component={NewPardnaScreen}
         options={{
-          title: "New Pardna",
-          tabBarIcon: ({ color }) => <TabBarIcon name="plus" color={color} />,
+          title: "New",
+          tabBarIcon: ({ color }) => (
+            <FontAwesomeIcon icon={faPlusCircle} size={24} color={color} />
+          ),
         }}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.navigate("NewPardnaModal");
+          },
+        })}
       />
     </BottomTab.Navigator>
   );
-}
-
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={30} {...props} />;
 }
 
 export default Navigation;

@@ -15,6 +15,27 @@ export const LOGIN_MUTATION = gql`
     }
   }
 `;
+export const CREATE_PARDNA = gql`
+  mutation (
+    $name: String
+    $participants: [ParticipantInput]
+    $startDate: Date
+    $contributionAmount: Int
+    $ledger: LedgerInput
+    $paymentFrequency: Frequency
+  ) {
+    createPardna(
+      name: $name
+      participants: $participants
+      startDate: $startDate
+      contributionAmount: $contributionAmount
+      ledger: $ledger
+      paymentFrequency: $paymentFrequency
+    ) {
+      id
+    }
+  }
+`;
 
 export const PARDNAS_QUERY = gql`
   query PARDNAS_QUERY {

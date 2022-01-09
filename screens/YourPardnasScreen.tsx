@@ -42,9 +42,7 @@ const YourPardnasScreen = ({
           }) => (
             <View style={tw.style("bg-white rounded-lg shadow")} key={id}>
               <View
-                style={tw.style(
-                  "flex-row items-center justify-between p-6 space-x-6",
-                )}
+                style={tw.style("flex-row items-center justify-between p-6")}
               >
                 <View style={tw.style("")}>
                   <Text style={tw.style("text-gray-900 text-sm font-medium")}>

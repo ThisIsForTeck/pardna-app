@@ -1,18 +1,26 @@
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import { Platform, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import tw from "../lib/tailwind";
 import NewPardnaForm from "../components/forms/NewPardnaForm/NewPardnaForm";
 
 const NewSparkModalScreen = () => {
   return (
-    <View>
+    <SafeAreaView style={tw.style("h-full p-4 bg-gray-50")}>
       <View>
-        <Text>New Pardna</Text>
+        <Text
+          style={tw.style(
+            "mb-6 text-center text-3xl font-extrabold text-gray-900",
+          )}
+        >
+          Create a new Pardna
+        </Text>
+        <NewPardnaForm />
+        {/* Use a light status bar on iOS to account for the black space above the modal */}
+        <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
       </View>
-      <NewPardnaForm />
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
-    </View>
+    </SafeAreaView>
   );
 };
 

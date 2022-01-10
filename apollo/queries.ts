@@ -15,8 +15,33 @@ export const LOGIN_MUTATION = gql`
     }
   }
 `;
+
+export const CREATE_USER_MUTATION = gql`
+  mutation createUser(
+    $firstName: String!
+    $lastName: String!
+    $email: String!
+    $password: String!
+  ) {
+    createUser(
+      firstName: $firstName
+      lastName: $lastName
+      email: $email
+      password: $password
+    ) {
+      user {
+        id
+        firstName
+        lastName
+        email
+      }
+      token
+    }
+  }
+`;
+
 export const CREATE_PARDNA = gql`
-  mutation (
+  mutation createPardna(
     $name: String
     $participants: [ParticipantInput]
     $startDate: Date

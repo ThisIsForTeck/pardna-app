@@ -2,10 +2,10 @@ import { View, Text } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
-import LogInForm from "../components/forms/LogInForm/LogInForm";
+import SignUpForm from "../components/forms/SignUpForm/SignUpForm";
 import tw from "../lib/tailwind";
 
-const LogInScreen = () => {
+const SignUpScreen = () => {
   const navigation = useNavigation();
 
   return (
@@ -18,16 +18,16 @@ const LogInScreen = () => {
           >
             Pardna
           </Text>
-          <LogInForm />
+          <SignUpForm />
         </View>
         <View style={tw`mt-8 bg-white p-8 shadow rounded`}>
           <Text style={tw`text-sm text-center`}>
-            Don't have an account?{" "}
+            Have an account?{" "}
             <Text
               style={tw` text-indigo-600 font-medium`}
-              onPress={() => navigation.navigate("SignUp")}
+              onPress={() => navigation.navigate("LogIn")}
             >
-              Sign up
+              Log in
             </Text>
           </Text>
         </View>
@@ -36,4 +36,4 @@ const LogInScreen = () => {
   );
 };
 
-export default LogInScreen;
+export default SignUpScreen;

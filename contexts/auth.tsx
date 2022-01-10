@@ -1,9 +1,16 @@
 import React, { createContext, ReactElement, useMemo, useReducer } from "react";
 import { useApolloClient } from "@apollo/client";
 import * as SecureStore from "expo-secure-store";
-import { LOGIN_MUTATION } from "../apollo/queries";
+import { LOGIN_MUTATION, CREATE_USER_MUTATION } from "../apollo/queries";
 
 type logInProps = {
+  email: string;
+  password: string;
+};
+
+type signUpProps = {
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 };
@@ -11,7 +18,7 @@ type logInProps = {
 export type AuthContextProps = {
   logIn: ({ email, password }: logInProps) => void;
   logOut: () => void;
-  register: () => void;
+  signUp: ({ firstName, lastName, email, password }: signUpProps) => void;
   state: {
     isLoading: boolean;
     isSignout: boolean;
@@ -25,7 +32,7 @@ export type AuthContextProviderProps = { children: ReactElement };
 export const AuthContext = createContext<AuthContextProps>({
   logIn: () => null,
   logOut: () => null,
-  register: () => null,
+  signUp: () => null,
   state: {
     isLoading: true,
     isSignout: false,
@@ -100,13 +107,24 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
         dispatch({ type: "SIGN_OUT" });
       },
-      register: async () => {
-        // TODO:
-        // In a production app, we need to send user data to server and get a token
-        // We will also need to handle errors if sign up failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
-        dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
+      signUp: async ({ firstName, lastName, email, password }: signUpProps) => {
+        try {
+          // manually firing off mutation and pull id from response
+          const {
+            data: {
+              createUser: { token },
+            },
+          } = await client.mutate({
+            mutation: CREATE_USER_MUTATION,
+            variables: { firstName, lastName, email, password },
+          });
+
+          await SecureStore.setItemAsync("userToken", token);
+
+          dispatch({ type: "SIGN_IN", token });
+        } catch (error) {
+          console.error({ error });
+        }
       },
     }),
     [],

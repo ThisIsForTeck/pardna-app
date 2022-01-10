@@ -5,24 +5,28 @@ import * as Yup from "yup";
 import { AuthContext } from "../../../contexts/auth";
 import tw from "../../../lib/tailwind";
 
-const LogInSchema = Yup.object().shape({
+const SignUpSchema = Yup.object().shape({
+  firstName: Yup.string().required(),
+  lastName: Yup.string().required(),
   email: Yup.string()
     .email("Please enter a valid email")
     .required("Please enter your email."),
   password: Yup.string().required("Please enter your password."),
 });
 
-const LogInForm = () => {
-  const { logIn } = useContext(AuthContext);
+const SignUpForm = () => {
+  const { signUp } = useContext(AuthContext);
 
   return (
     <Formik
-      initialValues={{ email: "", password: "" }}
-      validationSchema={LogInSchema}
-      onSubmit={async ({ email, password }, { resetForm }) => {
+      initialValues={{ firstName: "", lastName: "", email: "", password: "" }}
+      validationSchema={SignUpSchema}
+      onSubmit={async (
+        { firstName, lastName, email, password },
+        { resetForm },
+      ) => {
         try {
-          await logIn({ email, password });
-
+          await signUp({ firstName, lastName, email, password });
           resetForm();
         } catch (e) {
           console.error({ e });
@@ -32,6 +36,34 @@ const LogInForm = () => {
       {({ handleChange, handleBlur, handleSubmit, values }) => (
         <View>
           <View>
+            <Text style={tw`text-sm font-medium text-gray-700`}>
+              First name
+            </Text>
+            <View style={tw`mt-2"`}>
+              <TextInput
+                style={tw`w-full px-6 py-4 border border-gray-300 rounded-md shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+                value={values.firstName}
+                placeholder="Your first name"
+                onChangeText={handleChange("firstName")}
+                onBlur={handleBlur("firstName")}
+                autoCapitalize="none"
+              />
+            </View>
+          </View>
+          <View style={tw`mt-4`}>
+            <Text style={tw`text-sm font-medium text-gray-700`}>Last name</Text>
+            <View style={tw`mt-2"`}>
+              <TextInput
+                style={tw`w-full px-6 py-4 border border-gray-300 rounded-md shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+                value={values.lastName}
+                placeholder="Your last name"
+                onChangeText={handleChange("lastName")}
+                onBlur={handleBlur("lastName")}
+                autoCapitalize="none"
+              />
+            </View>
+          </View>
+          <View style={tw`mt-4`}>
             <Text style={tw`text-sm font-medium text-gray-700`}>
               Email address
             </Text>
@@ -50,7 +82,7 @@ const LogInForm = () => {
             <Text style={tw`text-sm font-medium text-gray-700`}>Password</Text>
             <View style={tw`mt-2`}>
               <TextInput
-                style={tw`w-full px-6 py-4 border border-gray-300 rounded-md shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+                style={tw`w-full px-6 py-4  border border-gray-300 rounded-md shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
                 value={values.password}
                 placeholder="Password"
                 onChangeText={handleChange("password")}
@@ -65,7 +97,7 @@ const LogInForm = () => {
             onPress={() => handleSubmit()}
           >
             <Text style={tw`text-sm font-medium text-white text-center`}>
-              Log in
+              Sign up
             </Text>
           </TouchableOpacity>
         </View>
@@ -74,4 +106,4 @@ const LogInForm = () => {
   );
 };
 
-export default LogInForm;
+export default SignUpForm;

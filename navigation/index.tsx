@@ -26,6 +26,7 @@ import {
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import LogInScreen from "../screens/LogInScreen";
+import SignUpScreen from "../screens/SignUpScreen";
 import NewPardnaModalScreen from "../screens/NewPardnaModalScreen";
 import tw from "../lib/tailwind";
 
@@ -77,11 +78,18 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       {userToken === null ? (
-        <Stack.Screen
-          name="LogIn"
-          component={LogInScreen}
-          options={{ headerShown: false }}
-        />
+        <>
+          <Stack.Screen
+            name="LogIn"
+            component={LogInScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SignUp"
+            component={SignUpScreen}
+            options={{ headerShown: false }}
+          />
+        </>
       ) : (
         <>
           <Stack.Screen

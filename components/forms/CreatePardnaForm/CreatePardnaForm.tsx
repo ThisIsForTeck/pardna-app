@@ -9,8 +9,11 @@ import {
 import { Formik } from "formik";
 import * as Yup from "yup";
 import DropDownPicker from "react-native-dropdown-picker";
+import DateTimePicker, { Event } from "@react-native-community/datetimepicker";
+import CurrencyInput from "react-native-currency-input";
 import { useMutation } from "@apollo/client";
-import { CREATE_PARDNA } from "../../../apollo/queries";
+import { useNavigation } from "@react-navigation/native";
+import { CREATE_PARDNA, PARDNAS_QUERY } from "../../../apollo/queries";
 import tw from "../../../lib/tailwind";
 
 const CreatePardnaSchema = Yup.object().shape({
@@ -22,26 +25,29 @@ const CreatePardnaSchema = Yup.object().shape({
     }),
   ),
   startDate: Yup.date(),
-  contributionAmount: Yup.string(), // TODO: should be number but couldnt get it to work with TextInput types
+  contributionAmount: Yup.number(), // TODO: should be number but couldnt get it to work with TextInput types
   paymentFrequency: Yup.string(),
 });
 
 const CreatePardnaForm = () => {
-  const [createPardna, { data, loading, error }] = useMutation(CREATE_PARDNA);
+  const [createPardna, { data, loading, error }] = useMutation(CREATE_PARDNA, {
+    refetchQueries: [PARDNAS_QUERY],
+  });
   const [paymentFrequencyOpen, setPaymentFrequencyOpen] = useState(false);
   const [paymentFrequencies, setPaymentFrequencies] = useState([
     { label: "Daily", value: "DAILY" },
     { label: "Weekly", value: "WEEKLY" },
     { label: "Monthly", value: "MONTHLY" },
   ]);
+  const navigation = useNavigation();
 
   return (
     <Formik
       initialValues={{
         name: "",
         participants: [],
-        startDate: "",
-        contributionAmount: "",
+        startDate: new Date(),
+        contributionAmount: 10,
         paymentFrequency: "",
       }}
       validationSchema={CreatePardnaSchema}
@@ -57,10 +63,13 @@ const CreatePardnaForm = () => {
               startDate,
               contributionAmount, // TODO: cast to a number
               paymentFrequency,
+              ledger: {},
             },
           });
 
           resetForm();
+
+          navigation.navigate("Root");
         } catch (e) {
           console.error({ e });
         }
@@ -87,13 +96,12 @@ const CreatePardnaForm = () => {
               Start Date
             </Text>
             <View style={tw`mt-2`}>
-              <TextInput
-                style={tw`w-full px-6 py-4 border border-gray-300 rounded-md shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+              <DateTimePicker
+                testID="dateTimePicker"
                 value={values.startDate}
-                placeholder="Start date"
-                onChangeText={handleChange("startDate")}
-                onBlur={handleBlur("startDate")}
-                autoCapitalize="none"
+                onChange={(event: Event, date: Date | undefined) =>
+                  setFieldValue("startDate", date)
+                }
               />
             </View>
           </View>
@@ -102,14 +110,17 @@ const CreatePardnaForm = () => {
               Contribution amount
             </Text>
             <View style={tw`mt-2`}>
-              <TextInput
+              <CurrencyInput
                 style={tw`w-full px-6 py-4 border border-gray-300 rounded-md shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
                 value={values.contributionAmount}
-                placeholder="Contribution amount"
-                onChangeText={handleChange("contributionAmount")}
-                onBlur={handleBlur("contributionAmount")}
-                autoCapitalize="none"
-                keyboardType="numeric"
+                prefix="£"
+                separator="."
+                delimiter=","
+                precision={2}
+                minValue={0}
+                onChangeValue={(value: number | null) =>
+                  setFieldValue("contributionAmount", value)
+                }
               />
             </View>
           </View>
@@ -120,16 +131,6 @@ const CreatePardnaForm = () => {
               Payment frequency
             </Text>
             <View style={tw`mt-2`}>
-              {/* <TextInput
-                style={tw`
-                  "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`
-                }
-                value={values.paymentFrequency}
-                placeholder="Payment frequency"
-                onChangeText={handleChange("paymentFrequency")}
-                onBlur={handleBlur("paymentFrequency")}
-                autoCapitalize="none"
-              /> */}
               <DropDownPicker
                 placeholder="Select Payment frequency"
                 showTickIcon={false}

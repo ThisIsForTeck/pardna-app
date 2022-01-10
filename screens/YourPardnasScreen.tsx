@@ -26,7 +26,7 @@ const YourPardnasScreen = ({
   }
 
   return (
-    <SafeAreaView style={tw.style("h-full p-4 bg-gray-50")}>
+    <SafeAreaView style={tw`h-full p-4 bg-gray-50`}>
       <View>
         {pardnas.map(
           ({
@@ -40,19 +40,17 @@ const YourPardnasScreen = ({
             startDate: Date;
             participants: any[];
           }) => (
-            <View style={tw.style("bg-white rounded-lg shadow")} key={id}>
-              <View
-                style={tw.style("flex-row items-center justify-between p-6")}
-              >
-                <View style={tw.style("")}>
-                  <Text style={tw.style("text-gray-900 text-sm font-medium")}>
+            <View style={tw`bg-white rounded-lg shadow`} key={id}>
+              <View style={tw`flex-row items-center justify-between p-6`}>
+                <View>
+                  <Text style={tw`text-gray-900 text-sm font-medium`}>
                     {name}
                   </Text>
-                  <Text style={tw.style("mt-1 text-gray-500 text-sm")}>
+                  <Text style={tw`mt-1 text-gray-500 text-sm`}>
                     Starting {format(startDate, "EEEE do MMM yyyy")}
                   </Text>
                 </View>
-                <Text style={tw.style("mt-1 text-gray-500 text-sm")}>
+                <Text style={tw`mt-1 text-gray-500 text-sm`}>
                   {participants.length} participant
                   {participants.length === 1 ? "" : "s"}
                 </Text>

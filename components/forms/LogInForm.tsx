@@ -32,14 +32,13 @@ const LogInForm = () => {
       {({ handleChange, handleBlur, handleSubmit, values }) => (
         <View>
           <View>
-            <Text style={tw.style("text-sm font-medium text-gray-700")}>
+            <Text style={tw`text-sm font-medium text-gray-700`}>
               Email address
             </Text>
-            <View style={tw.style("mt-2")}>
+            <View style={tw`mt-2`}>
               <TextInput
-                style={tw.style(
-                  "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm",
-                )}
+                style={tw`
+                  w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
                 value={values.email}
                 placeholder="Your email address"
                 onChangeText={handleChange("email")}
@@ -48,15 +47,11 @@ const LogInForm = () => {
               />
             </View>
           </View>
-          <View style={tw.style("mt-4")}>
-            <Text style={tw.style("text-sm font-medium text-gray-700")}>
-              Password
-            </Text>
-            <View style={tw.style("mt-2")}>
+          <View style={tw`mt-4`}>
+            <Text style={tw`text-sm font-medium text-gray-700`}>Password</Text>
+            <View style={tw`mt-2`}>
               <TextInput
-                style={tw.style(
-                  "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm",
-                )}
+                style={tw`w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
                 value={values.password}
                 placeholder="Password"
                 onChangeText={handleChange("password")}
@@ -67,14 +62,11 @@ const LogInForm = () => {
             </View>
           </View>
           <TouchableOpacity
-            style={tw.style(
-              "mt-8 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
-            )}
+            style={tw`
+              mt-8 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
             onPress={() => handleSubmit()}
           >
-            <Text
-              style={tw.style("text-sm font-medium text-white text-center")}
-            >
+            <Text style={tw`text-sm font-medium text-white text-center`}>
               Sign in
             </Text>
           </TouchableOpacity>

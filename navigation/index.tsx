@@ -38,7 +38,6 @@ const Navigation = ({ colorScheme }: { colorScheme: ColorSchemeName }) => {
 
       try {
         token = await SecureStore.getItemAsync("userToken");
-        console.log({ token });
       } catch (e) {
         // restoring token failed
         console.error({ e });
@@ -131,7 +130,7 @@ function BottomTabNavigator() {
           paddingBottom: 8,
         },
         headerRight: () => (
-          <Text style={tw.style("px-4")} onPress={logOut}>
+          <Text style={tw`px-4`} onPress={logOut}>
             Log out
           </Text>
         ),

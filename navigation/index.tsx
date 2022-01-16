@@ -23,12 +23,14 @@ import {
   RootStackParamList,
   RootTabParamList,
   RootTabScreenProps,
+  PardnaStackParamList,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import LogInScreen from "../screens/LogInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import NewPardnaModalScreen from "../screens/NewPardnaModalScreen";
 import tw from "../lib/tailwind";
+import PardnaScreen from "../screens/PardnaScreen";
 
 const Navigation = ({ colorScheme }: { colorScheme: ColorSchemeName }) => {
   const { dispatch } = useContext(AuthContext);
@@ -68,7 +70,7 @@ const Navigation = ({ colorScheme }: { colorScheme: ColorSchemeName }) => {
  * A root stack navigator is often used for displaying modals on top of all other content.
  * https://reactnavigation.org/docs/modal
  */
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   const {
@@ -76,15 +78,15 @@ function RootNavigator() {
   } = useContext(AuthContext);
 
   return (
-    <Stack.Navigator>
+    <RootStack.Navigator>
       {userToken === null ? (
         <>
-          <Stack.Screen
+          <RootStack.Screen
             name="LogIn"
             component={LogInScreen}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
+          <RootStack.Screen
             name="SignUp"
             component={SignUpScreen}
             options={{ headerShown: false }}
@@ -92,26 +94,26 @@ function RootNavigator() {
         </>
       ) : (
         <>
-          <Stack.Screen
+          <RootStack.Screen
             name="Root"
             component={BottomTabNavigator}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
+          <RootStack.Screen
             name="NotFound"
             component={NotFoundScreen}
             options={{ title: "Oops!" }}
           />
-          <Stack.Group screenOptions={{ presentation: "modal" }}>
-            <Stack.Screen
+          <RootStack.Group screenOptions={{ presentation: "modal" }}>
+            <RootStack.Screen
               name="NewPardnaModal"
               component={NewPardnaModalScreen}
               options={{ headerShown: false }}
             />
-          </Stack.Group>
+          </RootStack.Group>
         </>
       )}
-    </Stack.Navigator>
+    </RootStack.Navigator>
   );
 }
 
@@ -146,7 +148,7 @@ function BottomTabNavigator() {
     >
       <BottomTab.Screen
         name="YourPardnas"
-        component={YourPardnasScreen}
+        component={PardnaNavigator}
         options={({ navigation }: RootTabScreenProps<"YourPardnas">) => ({
           title: "Pardnas",
           tabBarIcon: ({ color }) => (
@@ -171,6 +173,31 @@ function BottomTabNavigator() {
         })}
       />
     </BottomTab.Navigator>
+  );
+}
+
+const PardnaStack = createNativeStackNavigator<PardnaStackParamList>();
+
+function PardnaNavigator() {
+  const {
+    state: { userToken },
+  } = useContext(AuthContext);
+
+  return (
+    <PardnaStack.Navigator>
+      <>
+        <PardnaStack.Screen
+          name="Root"
+          component={YourPardnasScreen}
+          options={{ headerShown: false }}
+        />
+        <PardnaStack.Screen
+          name="Pardna"
+          component={PardnaScreen}
+          options={{ headerShown: false }}
+        />
+      </>
+    </PardnaStack.Navigator>
   );
 }
 

@@ -37,3 +37,11 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
     BottomTabScreenProps<RootTabParamList, Screen>,
     NativeStackScreenProps<RootStackParamList>
   >;
+
+export type PardnaStackParamList = {
+  Root: undefined;
+  Pardna: undefined;
+};
+
+export type PardnaStackScreenProps<Screen extends keyof PardnaStackParamList> =
+  NativeStackScreenProps<PardnaStackParamList, Screen>;

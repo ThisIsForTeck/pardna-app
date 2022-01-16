@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { useContext } from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "../lib/tailwind";
 import { PARDNAS_QUERY } from "../apollo/queries";
@@ -8,9 +8,7 @@ import { AuthContext } from "../contexts/auth";
 import { RootTabScreenProps } from "../types";
 import format from "date-fns/format";
 
-const YourPardnasScreen = ({
-  navigation,
-}: RootTabScreenProps<"YourPardnas">) => {
+const YourPardnasScreen = ({ navigation }) => {
   const {
     state: { userToken },
   } = useContext(AuthContext);
@@ -74,7 +72,15 @@ const YourPardnasScreen = ({
             startDate: Date;
             participants: any[];
           }) => (
-            <View style={tw`bg-white rounded-lg shadow`} key={id}>
+            <TouchableOpacity
+              style={tw`bg-white rounded-lg shadow`}
+              key={id}
+              onPress={() =>
+                navigation.navigate("Pardna", {
+                  id,
+                })
+              }
+            >
               <View style={tw`flex-row items-center justify-between p-6`}>
                 <View>
                   <Text style={tw`text-gray-900 text-sm font-medium`}>
@@ -89,7 +95,7 @@ const YourPardnasScreen = ({
                   {participants.length === 1 ? "" : "s"}
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           ),
         )}
       </View>

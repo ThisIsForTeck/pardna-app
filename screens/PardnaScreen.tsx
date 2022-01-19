@@ -140,7 +140,7 @@ const PardnaScreen = ({
               size={20}
               style={tw`mr-2 text-gray-600`}
             />
-            <Text style={tw``}>{bankerFee}% Banker fee</Text>
+            <Text style={tw``}>{bankerFee}% banker fee</Text>
           </View>
         </View>
 

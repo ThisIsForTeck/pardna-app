@@ -89,6 +89,9 @@ const EditParticipantScreen = ({
               isSubmitting,
             }) => (
               <View>
+                <Text style={tw`text-3xl font-bold mb-8 text-center`}>
+                  Edit Participant
+                </Text>
                 <View>
                   <Text style={tw`text-sm font-medium text-gray-700`}>
                     Name
@@ -105,7 +108,7 @@ const EditParticipantScreen = ({
                     />
                   </View>
                 </View>
-                <View>
+                <View style={tw`mt-4`}>
                   <Text style={tw`text-sm font-medium text-gray-700`}>
                     Email
                   </Text>

@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { useContext } from "react";
 import tw from "../lib/tailwind";
-import { Text, View } from "react-native";
+import { Text, View, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PARDNA_QUERY } from "../apollo/queries";
 import Loader from "../components/Loader/Loader";
@@ -42,10 +42,11 @@ const EditPardnaScreen = ({
   if (!pardna) return null;
 
   return (
-    <SafeAreaView style={tw`h-full p-4 bg-gray-50 border-black`}>
-      <View style={tw`bg-white p-6`}>
+    <SafeAreaView style={tw`h-full p-4 bg-gray-50`}>
+      <ScrollView style={tw`bg-white p-6`}>
+        <Text style={tw`text-3xl font-bold mb-8 text-center`}>Edit Pardna</Text>
         <EditPardnaForm pardna={pardna} />
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

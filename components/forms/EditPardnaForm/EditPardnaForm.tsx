@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
-import { Formik } from "formik";
+import { FieldArray, Formik } from "formik";
 import * as Yup from "yup";
 import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker, { Event } from "@react-native-community/datetimepicker";
@@ -51,7 +51,6 @@ const EditPardnaForm = ({ pardna }) => {
     name,
     contributionAmount,
     bankerFee,
-    participants,
     startDate,
     duration,
     ledger: { paymentFrequency } = {},
@@ -64,7 +63,8 @@ const EditPardnaForm = ({ pardna }) => {
     bankerFee,
     contributionAmount: contributionAmount / 100,
     paymentFrequency,
-    participants,
+    addParticipants: [],
+    removeParticipants: [],
   };
 
   return (
@@ -122,7 +122,7 @@ const EditPardnaForm = ({ pardna }) => {
 
           switch (values.paymentFrequency) {
             case "DAILY":
-              prefix = " 2days";
+              prefix = " days";
               break;
             case "WEEKLY":
               prefix = " weeks";
@@ -141,7 +141,7 @@ const EditPardnaForm = ({ pardna }) => {
         const durationSuffix = getDurationSuffix();
 
         return (
-          <View>
+          <View style={tw`flex-1`}>
             <View>
               <Text style={tw`text-sm font-medium text-gray-700`}>Name</Text>
               <View style={tw`mt-2`}>
@@ -261,6 +261,91 @@ const EditPardnaForm = ({ pardna }) => {
                   onChangeValue={(value: number | null) =>
                     setFieldValue("bankerFee", value)
                   }
+                />
+              </View>
+            </View>
+            <View style={tw`mt-4`}>
+              <Text style={tw`text-sm font-medium text-gray-700`}>
+                Add Participants
+              </Text>
+              <View style={tw`mt-4`}>
+                <FieldArray
+                  name="addParticipants"
+                  render={(arrayHelpers) => (
+                    <View>
+                      {values.addParticipants.length > 0 ? (
+                        values.addParticipants.map((participant, index) => (
+                          <View key={index} style={tw`mb-8`}>
+                            <TextInput
+                              style={tw`
+                  w-full px-6 py-4 border border-gray-300 rounded-md shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm mb-4`}
+                              value={values.addParticipants[index].name}
+                              placeholder="Name"
+                              onChangeText={handleChange(
+                                `addParticipants[${index}].name`,
+                              )}
+                              onBlur={handleBlur(
+                                `addParticipants[${index}].name`,
+                              )}
+                              autoCapitalize="none"
+                            />
+                            <TextInput
+                              style={tw`
+                  w-full px-6 py-4 border border-gray-300 rounded-md shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+                              value={values.addParticipants[index].email}
+                              placeholder="Email"
+                              onChangeText={handleChange(
+                                `addParticipants[${index}].email`,
+                              )}
+                              onBlur={handleBlur(
+                                `addParticipants[${index}].email`,
+                              )}
+                              autoCapitalize="none"
+                            />
+                            <View style={tw`flex-row`}>
+                              <TouchableOpacity
+                                style={tw`mt-8 mr-4 flex flex-1 justify-center py-4 px-8 border border-red-600 rounded-md shadow-sm  hover:bg-red-700"`}
+                                onPress={() => arrayHelpers.remove(index)}
+                              >
+                                <Text
+                                  style={tw`text-sm font-medium text-red-600 text-center`}
+                                >
+                                  -
+                                </Text>
+                              </TouchableOpacity>
+                              <TouchableOpacity
+                                style={tw`mt-8 flex flex-1 justify-center py-4 px-8 border border-transparent rounded-md shadow-sm bg-green-600 hover:bg-green-700"`}
+                                onPress={() =>
+                                  arrayHelpers.insert(index + 1, {
+                                    name: "",
+                                    email: "",
+                                  })
+                                }
+                              >
+                                <Text
+                                  style={tw`text-sm font-medium text-white text-center`}
+                                >
+                                  +
+                                </Text>
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+                        ))
+                      ) : (
+                        <TouchableOpacity
+                          style={tw`mt-8 w-full flex justify-center py-4 px-8 border border-transparent rounded-md shadow-sm bg-green-600 hover:bg-indigo-700"`}
+                          onPress={() => arrayHelpers.push("")}
+                        >
+                          {/* show this when user has removed all friends from the list */}
+                          <Text
+                            style={tw`text-sm font-medium text-white text-center`}
+                          >
+                            Add a participant
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  )}
                 />
               </View>
             </View>

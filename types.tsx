@@ -41,6 +41,10 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
 export type PardnaStackParamList = {
   Root: undefined;
   Pardna: undefined;
+  Participant: undefined;
+  Payment: undefined;
+  EditParticipant: undefined;
+  EditPardna: undefined;
 };
 
 export type PardnaStackScreenProps<Screen extends keyof PardnaStackParamList> =

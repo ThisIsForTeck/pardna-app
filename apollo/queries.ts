@@ -40,22 +40,24 @@ export const CREATE_USER_MUTATION = gql`
   }
 `;
 
-export const CREATE_PARDNA = gql`
+export const CREATE_PARDNA_MUTATION = gql`
   mutation createPardna(
     $name: String
+    $paymentFrequency: Frequency
     $participants: [ParticipantInput]
     $startDate: Date
+    $duration: Int
     $contributionAmount: Int
-    $ledger: LedgerInput
-    $paymentFrequency: Frequency
+    $bankerFee: Float
   ) {
     createPardna(
       name: $name
+      paymentFrequency: $paymentFrequency
       participants: $participants
       startDate: $startDate
+      duration: $duration
       contributionAmount: $contributionAmount
-      ledger: $ledger
-      paymentFrequency: $paymentFrequency
+      bankerFee: $bankerFee
     ) {
       id
     }
@@ -80,6 +82,139 @@ export const PARDNAS_QUERY = gql`
           settled
         }
       }
+    }
+  }
+`;
+
+export const PARDNA_QUERY = gql`
+  query pardna($id: String!) {
+    pardna(id: $id) {
+      id
+      name
+      startDate
+      duration
+      endDate
+      contributionAmount
+      bankerFee
+      ledger {
+        id
+        paymentFrequency
+      }
+      participants {
+        id
+        name
+        payments {
+          id
+          type
+          dueDate
+          overdue
+          settled
+        }
+      }
+    }
+  }
+`;
+
+export const PARTICIPANT_QUERY = gql`
+  query participant($id: String!) {
+    participant(id: $id) {
+      id
+      name
+      email
+      createdAt
+      pardna {
+        id
+        name
+      }
+      payments {
+        id
+        type
+        dueDate
+        settled
+        settledDate
+        overdue
+      }
+    }
+  }
+`;
+
+export const PAYMENT_QUERY = gql`
+  query payment($id: String!) {
+    payment(id: $id) {
+      id
+      type
+      dueDate
+      settled
+      settledDate
+      participant {
+        id
+      }
+    }
+  }
+`;
+
+export const UPDATE_PAYMENT_MUTATION = gql`
+  mutation updatePayment($id: String, $settled: Boolean) {
+    updatePayment(id: $id, settled: $settled) {
+      id
+      settled
+      participant {
+        id
+      }
+    }
+  }
+`;
+
+export const UPDATE_PARTICIPANT_MUTATION = gql`
+  mutation updateParticipant($id: String, $name: String, $email: String) {
+    updateParticipant(id: $id, name: $name, email: $email) {
+      id
+      name
+      email
+    }
+  }
+`;
+
+export const DELETE_PARTICIPANT_MUTATION = gql`
+  mutation deleteParticipant($id: String) {
+    deleteParticipant(id: $id) {
+      id
+    }
+  }
+`;
+
+export const DELETE_PARDNA_MUTATION = gql`
+  mutation deletePardna($id: String) {
+    deletePardna(id: $id) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_PARDNA_MUTATION = gql`
+  mutation updatePardna(
+    $id: String!
+    $name: String
+    $paymentFrequency: Frequency
+    $startDate: Date
+    $duration: Int
+    $contributionAmount: Int
+    $bankerFee: Float
+    $addParticipants: [ParticipantInput]
+    $removeParticipants: [RemoveParticipantInput]
+  ) {
+    updatePardna(
+      id: $id
+      name: $name
+      paymentFrequency: $paymentFrequency
+      startDate: $startDate
+      duration: $duration
+      contributionAmount: $contributionAmount
+      bankerFee: $bankerFee
+      addParticipants: $addParticipants
+      removeParticipants: $removeParticipants
+    ) {
+      id
     }
   }
 `;

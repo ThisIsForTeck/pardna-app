@@ -31,6 +31,10 @@ import SignUpScreen from "../screens/SignUpScreen";
 import NewPardnaModalScreen from "../screens/NewPardnaModalScreen";
 import tw from "../lib/tailwind";
 import PardnaScreen from "../screens/PardnaScreen";
+import ParticipantScreen from "../screens/ParticipantScreen";
+import PaymentScreen from "../screens/PaymentScreen";
+import EditParticipantScreen from "../screens/EditParticipantScreen";
+import EditPardnaScreen from "../screens/EditPardnaScreen";
 
 const Navigation = ({ colorScheme }: { colorScheme: ColorSchemeName }) => {
   const { dispatch } = useContext(AuthContext);
@@ -194,6 +198,26 @@ function PardnaNavigator() {
         <PardnaStack.Screen
           name="Pardna"
           component={PardnaScreen}
+          options={{ headerShown: false }}
+        />
+        <PardnaStack.Screen
+          name="Participant"
+          component={ParticipantScreen}
+          options={{ headerShown: false }}
+        />
+        <PardnaStack.Screen
+          name="Payment"
+          component={PaymentScreen}
+          options={{ headerShown: false }}
+        />
+        <PardnaStack.Screen
+          name="EditParticipant"
+          component={EditParticipantScreen}
+          options={{ headerShown: false }}
+        />
+        <PardnaStack.Screen
+          name="EditPardna"
+          component={EditPardnaScreen}
           options={{ headerShown: false }}
         />
       </>

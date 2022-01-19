@@ -4,6 +4,8 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { AuthContext } from "../../../contexts/auth";
 import tw from "../../../lib/tailwind";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faSpinnerThird } from "@fortawesome/pro-regular-svg-icons";
 
 const LogInSchema = Yup.object().shape({
   email: Yup.string()
@@ -29,7 +31,7 @@ const LogInForm = () => {
         }
       }}
     >
-      {({ handleChange, handleBlur, handleSubmit, values }) => (
+      {({ handleChange, handleBlur, handleSubmit, values, isSubmitting }) => (
         <View>
           <View>
             <Text style={tw`text-sm font-medium text-gray-700`}>
@@ -61,12 +63,19 @@ const LogInForm = () => {
             </View>
           </View>
           <TouchableOpacity
-            style={tw`mt-8 w-full flex justify-center py-4 px-8 border border-transparent rounded-md shadow-sm bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+            style={tw`flex flex-row items-center mt-8 w-full flex justify-center py-4 px-8 border border-transparent rounded-md shadow-sm bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
             onPress={() => handleSubmit()}
           >
             <Text style={tw`text-sm font-medium text-white text-center`}>
-              Log in
+              {isSubmitting ? "Logging in" : "Log in"}
             </Text>
+            {isSubmitting ? (
+              <FontAwesomeIcon
+                icon={faSpinnerThird}
+                size={20}
+                style={tw`ml-2 text-white`}
+              />
+            ) : null}
           </TouchableOpacity>
         </View>
       )}

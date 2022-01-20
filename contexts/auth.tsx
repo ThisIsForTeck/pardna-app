@@ -81,23 +81,19 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         // After getting token, we need to persist the token using `AsyncStorage`
         // In the example, we'll use a dummy token
 
-        try {
-          // manually firing off mutation and pull id from response
-          const {
-            data: {
-              logIn: { token },
-            },
-          } = await client.mutate({
-            mutation: LOGIN_MUTATION,
-            variables: { email, password },
-          });
+        // manually firing off mutation and pull id from response
+        const {
+          data: {
+            logIn: { token },
+          },
+        } = await client.mutate({
+          mutation: LOGIN_MUTATION,
+          variables: { email, password },
+        });
 
-          await SecureStore.setItemAsync("userToken", token);
+        await SecureStore.setItemAsync("userToken", token);
 
-          dispatch({ type: "SIGN_IN", token });
-        } catch (error) {
-          console.error({ error });
-        }
+        dispatch({ type: "SIGN_IN", token });
       },
       logOut: async () => {
         await SecureStore.deleteItemAsync("userToken");

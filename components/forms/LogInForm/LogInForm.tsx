@@ -6,6 +6,8 @@ import { AuthContext } from "../../../contexts/auth";
 import tw from "../../../lib/tailwind";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faSpinnerThird } from "@fortawesome/pro-regular-svg-icons";
+import formatAPIErrors from "../../../utils/formatAPIErrors";
+import ErrorMessage from "../../ErrorMessage/ErrorMessage";
 
 const LogInSchema = Yup.object().shape({
   email: Yup.string()
@@ -21,17 +23,27 @@ const LogInForm = () => {
     <Formik
       initialValues={{ email: "", password: "" }}
       validationSchema={LogInSchema}
-      onSubmit={async ({ email, password }, { resetForm }) => {
+      onSubmit={async ({ email, password }, { resetForm, setErrors }) => {
         try {
           await logIn({ email, password });
 
           resetForm();
         } catch (e) {
           console.error({ e });
+          const formattedErrors = formatAPIErrors(e);
+          setErrors(formattedErrors);
         }
       }}
     >
-      {({ handleChange, handleBlur, handleSubmit, values, isSubmitting }) => (
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        isSubmitting,
+        errors,
+        touched,
+      }) => (
         <View>
           <View>
             <Text style={tw`text-sm font-medium text-gray-700`}>
@@ -61,6 +73,14 @@ const LogInForm = () => {
                 secureTextEntry
               />
             </View>
+          </View>
+          <View style={tw`mt-6`}>
+            {touched.email && errors.email ? (
+              <ErrorMessage text={errors.email} />
+            ) : null}
+            {touched.password && errors.password ? (
+              <ErrorMessage text={errors.password} />
+            ) : null}
           </View>
           <TouchableOpacity
             style={tw`flex flex-row items-center mt-8 w-full flex justify-center py-4 px-8 border border-transparent rounded-md shadow-sm bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}

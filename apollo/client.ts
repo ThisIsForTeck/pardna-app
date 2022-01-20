@@ -3,7 +3,6 @@ import {
   InMemoryCache,
   createHttpLink,
   ApolloLink,
-  HttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import * as SecureStore from "expo-secure-store";

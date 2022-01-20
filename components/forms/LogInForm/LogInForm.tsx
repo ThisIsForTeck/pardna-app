@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { TextInput, Text, View, TouchableOpacity } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { TextInput, Text, View, TouchableOpacity } from "react-native";
 import { AuthContext } from "../../../contexts/auth";
 import tw from "../../../lib/tailwind";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
